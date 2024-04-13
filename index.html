@@ -10,27 +10,83 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
         crossorigin="anonymous">
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+        crossorigin="anonymous">
+    </script>
+
 </head>
 <body>
     <div class="container-md">
         <h1>Olá!</h1>
-        <button class="text-button" id="new-schedule-button">Novo agendamento</button>
+        <button class="botao-normal" 
+            id="botao-novo-agendamento"
+            data-bs-toggle="modal" 
+            data-bs-target="#novoAgendamentoModal" 
+            onclick="limparCamposNovoAgendamento()">
+            Novo agendamento
+        </button>
         
-        <section id="filters-section">
-            <div class="container" id="filters-container">
-                <input class="filter-date" id="filter-start-date" type="date" />
-                <input class="filter-date" id="filter-end-date" type="date" />
-                <button class="text-button" id="search-button" onclick="onSearchButtonClicked()">
+        <section id="secao-filtros">
+            <div class="container-md" id="filters-container">
+                <input class="filtro-data" id="filtro-data-inicio" type="date" />
+                <input class="filtro-data" id="filtro-data-fim" type="date" />
+                <button class="botao-normal" id="botao-buscar" onclick="buscarAgendamentosPorData()">
                     Buscar
                 </button>
             </div>
         </section>
 
-        <section id="results-section">
-            <div class="container" id="schedule-list"></div>
+        <section id="secao-resultados">
+            <div class="container" id="lista-resultados"></div>
         </section>
     </div>
-    <script src="./script.js"></script>
 
+    <!-- Modal -->
+    <div class="modal fade" 
+        id="novoAgendamentoModal" 
+        tabindex="-1" 
+        aria-labelledby="novoAgendamentoRotulo" 
+        aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="novoAgendamentoRotulo">Agendar Serviço</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="novo-data-agendamento" class="col-form-label">Data agendamento:</label>
+                        <input class="form-control filtro-data" id="novo-data-agendamento" type="date" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="novo-nome-cliente" class="col-form-label">Cliente:</label>
+                        <input type="text" maxlength="140" class="form-control" id="novo-nome-cliente" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="novo-nome-pet" class="col-form-label">Pet:</label>
+                        <input type="text" maxlength="100" class="form-control" id="novo-nome-pet" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="servicos-agendamento" class="col-form-label">Serviço:</label>
+                        <select class="form-control" id="servicos-agendamento" onchange="selecionarOpcaoServico()"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="novo-valor-servico" class="col-form-label">Valor:</label>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" id="novo-valor-servico">R$ 0.00</label>
+                        </div> 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
 </body>
 </html>

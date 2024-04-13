@@ -1,39 +1,42 @@
 const baseUrl = 'http://127.0.0.1:5000/api'
 
-const onButtonClicked = () => {
-    document.getElementById('mensagem').innerHTML = 'Você clicou no botão!';
-}
+const buscarAgendamentosPorData = async () => {
+    let dataInicio = document.getElementById('filtro-data-inicio').value;
+    let dataFim = document.getElementById('filtro-data-fim').value;
 
-const onSearchButtonClicked = async () => {
-    let startDate = document.getElementById('filter-start-date').value;
-    let endDate = document.getElementById('filter-end-date').value;
-
-    let url = `${baseUrl}/agenda_servicos?data_inicio=${startDate}&data_fim=${endDate}`;
+    const url = `${baseUrl}/agenda_servicos?data_inicio=${dataInicio}&data_fim=${dataFim}`;
     fetch(url, {method: 'get'})
-        .then((response) => response.json())
-        .then((data) => updateScheduleList(data))
+        .then((response) => {
+            if (!response.ok) {
+                let data = response.json()
+                throw new Error(data.mensagem);
+            }
+            return response.json()
+        })
+        .then((data) => adicionarAgendamentos(data))
         .catch((error) => {
-          console.error('Error on fetch for schedule:', error);
+          console.error('Erro ao buscar por agendamentos:', error);
+          alert("Erro ao buscar agendamentos por data!")
         });
 }
 
-const updateScheduleList = (schedules) => {
-    document.getElementById('schedule-list').innerHTML = '';
+const adicionarAgendamentos = (agendamentos) => {
+    document.getElementById('lista-resultados').innerHTML = '';
 
-    schedules.forEach(item => addSchedule(item));
+    agendamentos.forEach(item => adicionarAgendamento(item));
 }
 
-const addSchedule = (schedule) => {
+const adicionarAgendamento = (agendamento) => {
     var itemElement = document.createElement("div")
-    itemElement.id = 'scheduleItem'
-    itemElement.className = 'schedule-item'
-    let itemIdElement = createItemIdElement(schedule.id)
-    var contentElement = document.createTextNode(`Cliente ${schedule.nome_cliente} irá trazer ${schedule.nome_pet} para fazer ${schedule.servico_titulo}`)
+    itemElement.id = 'item-agendamento-' + agendamento.id
+    itemElement.className = 'item-agendamento'
+    let itemIdElement = createItemIdElement(agendamento.id)
+    var contentElement = document.createTextNode(`Cliente ${agendamento.nome_cliente} irá trazer ${agendamento.nome_pet} para fazer ${agendamento.servico_titulo}`)
     
     itemElement.appendChild(itemIdElement)
     itemElement.appendChild(contentElement)
 
-    document.getElementById('schedule-list').appendChild(itemElement)
+    document.getElementById('lista-resultados').appendChild(itemElement)
 }
 
 const createItemIdElement = (value) => {
@@ -43,12 +46,70 @@ const createItemIdElement = (value) => {
     return element;
 }
 
-const initDateFilters = () => {
-    let today = new Date()
-    var startDateElement = document.getElementById('filter-start-date')
-    var endDateElement = document.getElementById('filter-end-date')
-    startDateElement.valueAsDate = today
-    endDateElement.valueAsDate = today
+/**
+ * Atribuit valores padrão para os filtros de data.
+ * 
+ * Valor padrão: Data atual.
+ */
+const iniciarFiltrosData = () => {
+    let hoje = new Date();
+    document.getElementById('filtro-data-inicio').valueAsDate = hoje;
+    document.getElementById('filtro-data-fim').valueAsDate = hoje;
 }
 
-initDateFilters()
+const selecionarOpcaoServico = () => {
+    let valorServico = document.getElementById('novo-valor-servico')
+    let valorServicoSelecionado = document.getElementById('servicos-agendamento').value
+    valorServico.textContent = `R$ ${parseFloat(valorServicoSelecionado)}`
+}
+
+const limparCamposNovoAgendamento = () => {
+    document.getElementById('novo-data-agendamento').valueAsDate = new Date()
+    document.getElementById('novo-nome-cliente').value = ''
+    document.getElementById('novo-nome-pet').value = ''
+    document.getElementById('novo-valor-servico').textContent = 'R$ 0.00'
+}
+
+const carregarServicos = async () => {
+    const url = `${baseUrl}/servico`;
+    fetch(url, {method: 'get'})
+        .then((response) => {
+            if (!response.ok) {
+                let data = response.json()
+                throw new Error(data.mensagem);
+            }
+            return response.json()
+        })
+        .then((data) => adicionarServicos(data))
+        .catch((error) => {
+          console.error('Erro ao buscar por agendamentos:', error);
+        });
+}
+
+const adicionarServicos = (servicos) => {
+    let servicosAgendamento = document.getElementById('servicos-agendamento')
+    servicosAgendamento.innerHTML = ''
+    let placeholder = {
+        "id" : -1,
+        "preco_unitario" : 0.00,
+        "titulo" : "Selecione um serviço" 
+    }
+    servicosAgendamento.appendChild(novaOpcaoServico(placeholder))
+    servicos.forEach(servico => {
+        let opcao = novaOpcaoServico(servico)
+        servicosAgendamento.appendChild(opcao)
+    });
+}
+
+const novaOpcaoServico = (servico) => {
+    let opcao = document.createElement('option')
+    opcao.text = servico.titulo
+    opcao.value = servico.preco_unitario
+    opcao.id = servico.id
+    return opcao
+}
+
+// Inicia os filtros de busca pelo valor padrão do campo.
+iniciarFiltrosData()
+
+carregarServicos()
