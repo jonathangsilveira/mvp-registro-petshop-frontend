@@ -10,11 +10,6 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
         crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-        crossorigin="anonymous">
-    </script>
-
 </head>
 <body>
     <div class="container-md">
@@ -61,12 +56,27 @@
                         <input class="form-control filtro-data" id="novo-data-agendamento" type="date" />
                     </div>
                     <div class="mb-3">
+                        <label for="novo-hora-agendamento" class="col-form-label">Hora agendamento:</label>
+                        <select class="form-control filtro-data" id="novo-hora-agendamento">
+                            <option value="">Selecionar um horário</option>
+                            <option value="8">8h</option>
+                            <option value="9">9h</option>
+                            <option value="10">10h</option>
+                            <option value="11">11h</option>
+                            <option value="13">13h</option>
+                            <option value="14">14h</option>
+                            <option value="15">15h</option>
+                            <option value="16">16h</option>
+                            <option value="17">17h</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="novo-nome-cliente" class="col-form-label">Cliente:</label>
-                        <input type="text" maxlength="140" class="form-control" id="novo-nome-cliente" />
+                        <input type="text" maxlength="140" class="form-control" id="novo-nome-cliente"/>
                     </div>
                     <div class="mb-3">
                         <label for="novo-nome-pet" class="col-form-label">Pet:</label>
-                        <input type="text" maxlength="100" class="form-control" id="novo-nome-pet" />
+                        <input type="text" maxlength="100" class="form-control" id="novo-nome-pet"/>
                     </div>
                     <div class="mb-3">
                         <label for="servicos-agendamento" class="col-form-label">Serviço:</label>
@@ -75,18 +85,25 @@
                     <div class="mb-3">
                         <label for="novo-valor-servico" class="col-form-label">Valor:</label>
                         <div class="input-group mb-3">
-                            <label class="input-group-text" id="novo-valor-servico">R$ 0.00</label>
+                            <span class="input-group-text">R$</span>
+                            <label class="input-group-text" id="novo-valor-servico">0.00</label>
                         </div> 
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="registrarNovoAgendamento()">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="./script.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+        crossorigin="anonymous">
+    </script>
 </body>
 </html>

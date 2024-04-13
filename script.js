@@ -60,14 +60,15 @@ const iniciarFiltrosData = () => {
 const selecionarOpcaoServico = () => {
     let valorServico = document.getElementById('novo-valor-servico')
     let valorServicoSelecionado = document.getElementById('servicos-agendamento').value
-    valorServico.textContent = `R$ ${parseFloat(valorServicoSelecionado)}`
+    valorServico.textContent = valorServicoSelecionado
 }
 
 const limparCamposNovoAgendamento = () => {
     document.getElementById('novo-data-agendamento').valueAsDate = new Date()
+    document.getElementById('novo-hora-agendamento').value = ''
     document.getElementById('novo-nome-cliente').value = ''
     document.getElementById('novo-nome-pet').value = ''
-    document.getElementById('novo-valor-servico').textContent = 'R$ 0.00'
+    document.getElementById('novo-valor-servico').textContent = '0.00'
 }
 
 const carregarServicos = async () => {
@@ -109,7 +110,40 @@ const novaOpcaoServico = (servico) => {
     return opcao
 }
 
-// Inicia os filtros de busca pelo valor padrão do campo.
+const registrarNovoAgendamento = async () => {
+    let dataAgendamento = document.getElementById('novo-data-agendamento').value
+    let horaAgendamento = document.getElementById('novo-hora-agendamento').value
+    let nomeCliente = document.getElementById('novo-nome-cliente').value
+    let nomePet = document.getElementById('novo-nome-pet').value
+    let valorServico = document.getElementById('novo-valor-servico').textContent
+    let servicosAgendamento = document.getElementById('servicos-agendamento')
+    let servicoSelecionado = servicosAgendamento.options[servicosAgendamento.selectedIndex]
+    let servicoId = servicoSelecionado.id
+    
+    let form = new FormData()
+    form.append('data_agendamento', `${dataAgendamento} ${horaAgendamento}:00:00`)
+    form.append('nome_cliente', nomeCliente)
+    form.append('nome_pet', nomePet)
+    form.append('servico_id', servicoId)
+    form.append('valor_servico', valorServico)
+
+    const url = `${baseUrl}/agendamento_servico/novo`
+    fetch(url, {method: 'POST', body: form})
+        .then(async (response) => {
+            if (!response.ok) {
+                let data = await response.json()
+                throw data.mensagem
+            }
+            alert('Serviço agendado com sucesso!')
+        })
+        .catch((erro) => {
+            console.debug('Erro ao agendar novo serviço!\n' + erro)
+            alert('Erro ao agendar novo serviço!\n' + erro)
+        })
+}
+
+// Inicia os filtros  na inicialização do script.
 iniciarFiltrosData()
 
+// Carregar serviços ativos na inicialização do script.
 carregarServicos()
