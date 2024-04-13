@@ -1,15 +1,18 @@
 const baseUrl = 'http://127.0.0.1:5000/api'
 
+/**
+ * Busca os agendamentos registrados no período informado nos filtros.
+ */
 const buscarAgendamentosPorData = async () => {
     let dataInicio = document.getElementById('filtro-data-inicio').value;
     let dataFim = document.getElementById('filtro-data-fim').value;
 
     const url = `${baseUrl}/agenda_servicos?data_inicio=${dataInicio}&data_fim=${dataFim}`;
     fetch(url, {method: 'get'})
-        .then((response) => {
+        .then(async (response) => {
             if (!response.ok) {
-                let data = response.json()
-                throw new Error(data.mensagem);
+                let data = await response.json()
+                throw data.mensagem
             }
             return response.json()
         })
@@ -20,21 +23,36 @@ const buscarAgendamentosPorData = async () => {
         });
 }
 
+/**
+ * Atualiza a listagem de agendamentos na página.
+ * 
+ * @param {JSON} agendamentos 
+ */
 const adicionarAgendamentos = (agendamentos) => {
     document.getElementById('lista-resultados').innerHTML = '';
 
     agendamentos.forEach(item => adicionarAgendamento(item));
 }
 
+/**
+ * Adiciona agendamento da listagem da página.
+ * 
+ * @param {JSON} agendamento 
+ */
 const adicionarAgendamento = (agendamento) => {
     var itemElement = document.createElement("div")
     itemElement.id = 'item-agendamento-' + agendamento.id
     itemElement.className = 'item-agendamento'
     let itemIdElement = createItemIdElement(agendamento.id)
+    let botaoExcluir = criarBotaoExcluirAgendamento()
+    botaoExcluir.onclick = function () {
+        excluirAgendamento(agendamento.id)
+    }
     var contentElement = document.createTextNode(`Cliente ${agendamento.nome_cliente} irá trazer ${agendamento.nome_pet} para fazer ${agendamento.servico_titulo}`)
     
     itemElement.appendChild(itemIdElement)
     itemElement.appendChild(contentElement)
+    itemElement.appendChild(botaoExcluir)
 
     document.getElementById('lista-resultados').appendChild(itemElement)
 }
@@ -44,6 +62,19 @@ const createItemIdElement = (value) => {
     element.type = 'hidden';
     element.value = value;
     return element;
+}
+
+const criarBotaoExcluirAgendamento = () => {
+    let botao = document.createElement("button")
+    botao.className = 'botao-icone-acao'
+    let img = document.createElement("i")
+    img.className = 'bi bi-trash'
+    botao.appendChild(img)
+    return botao;
+}
+
+const criarBotaoCancelarAgendamento = () => {
+
 }
 
 /**
@@ -57,12 +88,20 @@ const iniciarFiltrosData = () => {
     document.getElementById('filtro-data-fim').valueAsDate = hoje;
 }
 
+/**
+ * Ao selecionar uma opção de servicço, atualiza o valor do serviço agendado.
+ * 
+ */
 const selecionarOpcaoServico = () => {
     let valorServico = document.getElementById('novo-valor-servico')
     let valorServicoSelecionado = document.getElementById('servicos-agendamento').value
     valorServico.textContent = valorServicoSelecionado
 }
 
+/**
+ * Limpa os valores dos campos de registro de agendamento.
+ * 
+ */
 const limparCamposNovoAgendamento = () => {
     document.getElementById('novo-data-agendamento').valueAsDate = new Date()
     document.getElementById('novo-hora-agendamento').value = ''
@@ -72,6 +111,10 @@ const limparCamposNovoAgendamento = () => {
     document.getElementById('servicos-agendamento').value = 0
 }
 
+/**
+ * Carrega os serviços ativos na base para exibir na página.
+ * 
+ */
 const carregarServicos = async () => {
     const url = `${baseUrl}/servico`;
     fetch(url, {method: 'get'})
@@ -88,6 +131,10 @@ const carregarServicos = async () => {
         });
 }
 
+/**
+ * Adiciona as opções de serviços no seletor de serviços.
+ * 
+ */
 const adicionarServicos = (servicos) => {
     let servicosAgendamento = document.getElementById('servicos-agendamento')
     servicosAgendamento.innerHTML = ''
@@ -103,6 +150,10 @@ const adicionarServicos = (servicos) => {
     });
 }
 
+/**
+ * Adiciona uma opção no seletor de serviços.
+ * 
+ */
 const novaOpcaoServico = (servico) => {
     let opcao = document.createElement('option')
     opcao.text = servico.titulo
@@ -111,6 +162,10 @@ const novaOpcaoServico = (servico) => {
     return opcao
 }
 
+/**
+ * Registra um novo agendamento na base de dados.
+ * 
+ */
 const registrarNovoAgendamento = async () => {
     let dataAgendamento = document.getElementById('novo-data-agendamento').value
     let horaAgendamento = document.getElementById('novo-hora-agendamento').value
@@ -143,8 +198,33 @@ const registrarNovoAgendamento = async () => {
         })
 }
 
+/**
+ * Exclui um agendamento na base e atualiza a listagem.
+ * 
+ */
+const excluirAgendamento = (id) => {
+    console.debug('Excluir agendamento de id', id)
+    const url = `${baseUrl}/agendamento_servico?id=${id}`
+    fetch(url, {method: 'DELETE'})
+        .then(async (response) => {
+            if (!response.ok) {
+                let data = await response.json()
+                throw data.mensagem
+            }
+            buscarAgendamentosPorData()
+            alert('Agendamento cancelado com sucesso!')
+        })
+        .catch((erro) => {
+            console.debug('Erro ao cancelar agendamento de serviço!\n' + erro)
+            alert('Erro ao cancelar agendamento de serviço!\n' + erro)
+        })
+}
+
 // Inicia os filtros  na inicialização do script.
 iniciarFiltrosData()
+
+// Carregar agendamentos para o dia atual
+buscarAgendamentosPorData()
 
 // Carregar serviços ativos na inicialização do script.
 carregarServicos()
