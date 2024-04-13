@@ -69,6 +69,7 @@ const limparCamposNovoAgendamento = () => {
     document.getElementById('novo-nome-cliente').value = ''
     document.getElementById('novo-nome-pet').value = ''
     document.getElementById('novo-valor-servico').textContent = '0.00'
+    document.getElementById('servicos-agendamento').value = 0
 }
 
 const carregarServicos = async () => {
