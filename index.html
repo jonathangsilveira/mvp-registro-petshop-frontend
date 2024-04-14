@@ -24,10 +24,14 @@
         <section id="secao-filtros">
             <div class="conteudo-alinhamento-final" id="filters-container">
                 <input class="filtro-data" id="filtro-data-inicio" type="date" />
+                &nbsp;
                 <input class="filtro-data" id="filtro-data-fim" type="date" />
+                &nbsp;
                 <button class="botao-normal" 
                     id="botao-buscar" 
                     onclick="buscarAgendamentosPorData()">
+                    <i class="bi bi-search"></i>
+                    &nbsp;
                     Buscar
                 </button>
             </div>
@@ -39,6 +43,8 @@
                 data-bs-toggle="modal" 
                 data-bs-target="#novoAgendamentoModal" 
                 onclick="limparCamposNovoAgendamento()">
+                <i class="bi bi-plus-lg"></i>
+                &nbsp;
                 Novo agendamento
             </button>
         </div>
