@@ -46,12 +46,19 @@ const adicionarAgendamento = (agendamento) => {
     let itemIdElement = createItemIdElement(agendamento.id)
     let botaoExcluir = criarBotaoExcluirAgendamento()
     botaoExcluir.onclick = function () {
-        excluirAgendamento(agendamento.id)
+        excluirAgendamento(agendamento.id);
     }
     var contentElement = document.createTextNode(`Cliente ${agendamento.nome_cliente} irá trazer ${agendamento.nome_pet} para fazer ${agendamento.servico_titulo}`)
     
     itemElement.appendChild(itemIdElement)
     itemElement.appendChild(contentElement)
+    if (!agendamento.cancelado) {
+        let botaoCancelar = criarBotaoCancelarAgendamento()
+        botaoCancelar.onclick = function () {
+            cancelarAgendamento(agendamento.id);
+        }
+        itemElement.appendChild(botaoCancelar)
+    }
     itemElement.appendChild(botaoExcluir)
 
     document.getElementById('lista-resultados').appendChild(itemElement)
@@ -66,7 +73,7 @@ const createItemIdElement = (value) => {
 
 const criarBotaoExcluirAgendamento = () => {
     let botao = document.createElement("button")
-    botao.className = 'botao-icone-acao'
+    botao.className = 'botao-icone'
     let img = document.createElement("i")
     img.className = 'bi bi-trash'
     botao.appendChild(img)
@@ -74,7 +81,12 @@ const criarBotaoExcluirAgendamento = () => {
 }
 
 const criarBotaoCancelarAgendamento = () => {
-
+    let botao = document.createElement("button")
+    botao.className = 'botao-icone'
+    let img = document.createElement("i")
+    img.className = 'bi bi-calendar-x'
+    botao.appendChild(img)
+    return botao;
 }
 
 /**
@@ -118,10 +130,10 @@ const limparCamposNovoAgendamento = () => {
 const carregarServicos = async () => {
     const url = `${baseUrl}/servico`;
     fetch(url, {method: 'get'})
-        .then((response) => {
+        .then(async (response) => {
             if (!response.ok) {
-                let data = response.json()
-                throw new Error(data.mensagem);
+                let data = await response.json()
+                throw data.mensagem;
             }
             return response.json()
         })
@@ -203,7 +215,6 @@ const registrarNovoAgendamento = async () => {
  * 
  */
 const excluirAgendamento = (id) => {
-    console.debug('Excluir agendamento de id', id)
     const url = `${baseUrl}/agendamento_servico?id=${id}`
     fetch(url, {method: 'DELETE'})
         .then(async (response) => {
@@ -212,12 +223,37 @@ const excluirAgendamento = (id) => {
                 throw data.mensagem
             }
             buscarAgendamentosPorData()
-            alert('Agendamento cancelado com sucesso!')
+            alert('Agendamento excluído com sucesso!')
         })
         .catch((erro) => {
-            console.debug('Erro ao cancelar agendamento de serviço!\n' + erro)
-            alert('Erro ao cancelar agendamento de serviço!\n' + erro)
+            console.debug('Erro ao excluir agendamento de serviço!\n' + erro)
+            alert('Erro ao excluir agendamento de serviço!\n' + erro)
         })
+}
+
+/**
+ * Cancelar um agendamento na base e atualiza a listagem.
+ * 
+ */
+const cancelarAgendamento = (id) => {
+    const alerta = 'Cancelamento do serviço não irá liberar o horário para nova marcação.'
+    const confirmacao = 'Tem certeza que deseja prosseguir?'
+    if (confirm(`${alerta}\n${confirmacao}`)) {
+        const url = `${baseUrl}/agendamento_servico/cancelar?id=${id}`
+        fetch(url, {method: 'POST'})
+            .then(async (response) => {
+                if (!response.ok) {
+                    let data = await response.json()
+                    throw data.mensagem
+                }
+                buscarAgendamentosPorData()
+                alert('Agendamento cancelado com sucesso!')
+            })
+            .catch((erro) => {
+                console.debug('Erro ao cancelar agendamento de serviço!\n' + erro)
+                alert('Erro ao cancelar agendamento de serviço!\n' + erro)
+            })
+    }
 }
 
 // Inicia os filtros  na inicialização do script.
