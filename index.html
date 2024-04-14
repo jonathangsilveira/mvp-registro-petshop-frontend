@@ -15,31 +15,50 @@
 </head>
 <body>
     <div class="container-md">
-        <h1>Olá!</h1>
-        <button class="botao-normal" 
-            id="botao-novo-agendamento"
-            data-bs-toggle="modal" 
-            data-bs-target="#novoAgendamentoModal" 
-            onclick="limparCamposNovoAgendamento()">
-            Novo agendamento
-        </button>
-        
+        <header>
+            <div class="title">
+                <h2>Registro de agendamento de serviços</h2>
+            </div>
+        </header>
+
         <section id="secao-filtros">
-            <div class="container-md" id="filters-container">
+            <div class="conteudo-alinhamento-final" id="filters-container">
                 <input class="filtro-data" id="filtro-data-inicio" type="date" />
                 <input class="filtro-data" id="filtro-data-fim" type="date" />
-                <button class="botao-normal" id="botao-buscar" onclick="buscarAgendamentosPorData()">
+                <button class="botao-normal" 
+                    id="botao-buscar" 
+                    onclick="buscarAgendamentosPorData()">
                     Buscar
                 </button>
             </div>
         </section>
 
+        <div class="conteudo-alinhamento-final">
+            <button class="botao-normal" 
+                id="botao-novo-agendamento"
+                data-bs-toggle="modal" 
+                data-bs-target="#novoAgendamentoModal" 
+                onclick="limparCamposNovoAgendamento()">
+                Novo agendamento
+            </button>
+        </div>
+
         <section id="secao-resultados">
-            <div class="container" id="lista-resultados"></div>
+            <table class="tabela-agendamentos">
+                <tr>
+                    <th>Data/Hora</th>
+                    <th>Serviço</th>
+                    <th>Pet</th>
+                    <th>Valor</th>
+                    <th>Cancelado</th>
+                    <th>Ações</th>
+                </tr>
+            </table>
+            <table class="tabela-agendamentos" id="lista-resultados"></table>
         </section>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Novo Agendamento -->
     <div class="modal fade" 
         id="novoAgendamentoModal" 
         tabindex="-1" 
@@ -50,7 +69,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="novoAgendamentoRotulo">Agendar Serviço</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" 
+                        class="btn-close" 
+                        data-bs-dismiss="modal" 
+                        aria-label="Fechar">
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -93,8 +116,17 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="botao-cancelar" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="botao-normal" data-bs-dismiss="modal" onclick="registrarNovoAgendamento()">Salvar</button>
+                    <button type="button" 
+                        class="botao-cancelar" 
+                        data-bs-dismiss="modal">
+                        Fechar
+                    </button>
+                    <button type="button" 
+                        class="botao-normal" 
+                        data-bs-dismiss="modal" 
+                        onclick="registrarNovoAgendamento()">
+                        Salvar
+                    </button>
                 </div>
             </div>
         </div>

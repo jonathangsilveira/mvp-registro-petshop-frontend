@@ -29,46 +29,45 @@ const buscarAgendamentosPorData = async () => {
  * @param {JSON} agendamentos 
  */
 const adicionarAgendamentos = (agendamentos) => {
-    document.getElementById('lista-resultados').innerHTML = '';
+    let tabela = document.getElementById('lista-resultados')
+    for (i = 0; i < tabela.rows.length; i++) {
+        tabela.deleteRow(i)
+    }
 
-    agendamentos.forEach(item => adicionarAgendamento(item));
+    agendamentos.forEach(item => adicionarAgendamento(tabela, item));
 }
 
 /**
- * Adiciona agendamento da listagem da página.
  * 
+ * @param {HTMLTableElement} tabela 
  * @param {JSON} agendamento 
  */
-const adicionarAgendamento = (agendamento) => {
-    var itemElement = document.createElement("div")
-    itemElement.id = 'item-agendamento-' + agendamento.id
-    itemElement.className = 'item-agendamento'
-    let itemIdElement = createItemIdElement(agendamento.id)
-    let botaoExcluir = criarBotaoExcluirAgendamento()
-    botaoExcluir.onclick = function () {
-        excluirAgendamento(agendamento.id);
-    }
-    var contentElement = document.createTextNode(`Cliente ${agendamento.nome_cliente} irá trazer ${agendamento.nome_pet} para fazer ${agendamento.servico_titulo}`)
-    
-    itemElement.appendChild(itemIdElement)
-    itemElement.appendChild(contentElement)
+const adicionarAgendamento = (tabela, agendamento) => {
+    let linha = tabela.insertRow()
+    let colunas = [
+        formatarDataHora(agendamento.data_agendamento), 
+        agendamento.servico_titulo,
+        agendamento.nome_pet,
+        `R$ ${agendamento.valor_servico}`,
+        agendamento.cancelado ? 'Sim' : 'Não'
+    ]
+    colunas.forEach((coluna) => {
+        let celula = linha.insertCell()
+        celula.textContent = coluna;
+    })
+    let celulaAcoes = linha.insertCell()
     if (!agendamento.cancelado) {
         let botaoCancelar = criarBotaoCancelarAgendamento()
         botaoCancelar.onclick = function () {
             cancelarAgendamento(agendamento.id);
         }
-        itemElement.appendChild(botaoCancelar)
+        celulaAcoes.appendChild(botaoCancelar)
     }
-    itemElement.appendChild(botaoExcluir)
-
-    document.getElementById('lista-resultados').appendChild(itemElement)
-}
-
-const createItemIdElement = (value) => {
-    var element = document.createElement("input");
-    element.type = 'hidden';
-    element.value = value;
-    return element;
+    let botaoExcluir = criarBotaoExcluirAgendamento()
+    botaoExcluir.onclick = function () {
+        excluirAgendamento(agendamento.id);
+    }
+    celulaAcoes.appendChild(botaoExcluir)
 }
 
 const criarBotaoExcluirAgendamento = () => {
@@ -202,6 +201,7 @@ const registrarNovoAgendamento = async () => {
                 let data = await response.json()
                 throw data.mensagem
             }
+            buscarAgendamentosPorData()
             alert('Serviço agendado com sucesso!')
         })
         .catch((erro) => {
@@ -254,6 +254,21 @@ const cancelarAgendamento = (id) => {
                 alert('Erro ao cancelar agendamento de serviço!\n' + erro)
             })
     }
+}
+
+/**
+ * Formata a string para exibir o registro.
+ * 
+ * @param {String} textDataHora: Data e hora formato string. 
+ * @returns String formatada dd/mm/aaaa HH.
+ */
+const formatarDataHora = (textDataHora) => {
+    let dataHora = new Date(textDataHora)
+    const dia = dataHora.getDate()
+    const mes = dataHora.getMonth()
+    const ano = dataHora.getFullYear()
+    const hora = dataHora.getHours()
+    return `${dia}/${mes}/${ano} ${hora}H`
 }
 
 // Inicia os filtros  na inicialização do script.

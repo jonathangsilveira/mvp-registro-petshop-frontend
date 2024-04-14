@@ -12,6 +12,23 @@ p {
     color: #666;
 }
 
+header {
+    background-color: rgb(225, 222, 199);
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+.title {
+    color: white;
+    width: 100%;
+    background-color: rgb(35, 32, 24);
+    display: inline-block;
+    padding: 2px 0px;
+    position: sticky;
+    top: 0px;
+}
+
 #container-filtros {
     display: inline-flexbox;
     flex-wrap: nowrap;
@@ -35,6 +52,17 @@ p {
     align-self: self-end;
 }
 
+.botao-icone {
+    background-color: #007bff;
+    color: white;
+    padding: 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-content: center;
+    align-self: center;
+}
+
 .botao-cancelar {
     background-color: #7e7e7e;
     color: white;
@@ -48,18 +76,60 @@ p {
 
 .botao-cancelar:hover {
     background-color: #646464;
+    cursor: pointer;
 }
 
 .botao-normal:hover {
     background-color: #0056b3;
+    cursor: pointer;
 }
 
+.botao-icone:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+}
 
-.item-agendamento {
+.tabela-agendamentos {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+.tabela-agendamentos td, #tabela-agendamentos th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela-agendamentos th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    margin-top: 8px;
+}
+
+section {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.conteudo-centralizado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.conteudo-alinhamento-final {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    align-content: space-between;
+}
+
+.conteudo-alinhamento-inicio {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    align-content: space-between;
+    flex-grow: 2;
 }
