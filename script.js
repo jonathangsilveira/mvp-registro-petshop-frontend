@@ -48,7 +48,8 @@ const adicionarAgendamento = (tabela, agendamento) => {
     let colunas = [
         formatarDataHora(agendamento.data_agendamento), 
         agendamento.servico_titulo,
-        `${agendamento.nome_cliente} / ${agendamento.nome_pet}`,
+        agendamento.nome_pet,
+        agendamento.nome_cliente,
         `R$ ${agendamento.valor_servico}`,
         agendamento.cancelado ? 'Sim' : 'Não'
     ]
@@ -272,12 +273,17 @@ const formatarDataHora = (textDataHora) => {
     return `${dia}/${mes}/${ano} ${hora}H`
 }
 
-
+/**
+ * Adiciona cabeçalho para a tabela de resultados.
+ * 
+ * @param {HTMLTableElement} tabela 
+ */
 const adicionarCabecalhoTabela = (tabela) => {
     let titulos = [
         'Data/Hora',
         'Serviço',
-        'Cliente / Pet',
+        'Pet',
+        'Cliente',
         'Valor',
         'Cancelado',
         'Ações'
