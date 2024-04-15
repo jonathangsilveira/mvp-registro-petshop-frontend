@@ -94,7 +94,7 @@ header {
     width: 100%;
 }
   
-.tabela-agendamentos td, #tabela-agendamentos th {
+.tabela-agendamentos td, .tabela-agendamentos th {
     border: 1px solid #ddd;
     padding: 8px;
 }
