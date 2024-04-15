@@ -38,6 +38,7 @@ const adicionarAgendamentos = (agendamentos) => {
 }
 
 /**
+ * Adiciona linha na tabela de resultados com as informações do agendamento.
  * 
  * @param {HTMLTableElement} tabela 
  * @param {JSON} agendamento 
@@ -47,7 +48,7 @@ const adicionarAgendamento = (tabela, agendamento) => {
     let colunas = [
         formatarDataHora(agendamento.data_agendamento), 
         agendamento.servico_titulo,
-        agendamento.nome_pet,
+        `${agendamento.nome_cliente} / ${agendamento.nome_pet}`,
         `R$ ${agendamento.valor_servico}`,
         agendamento.cancelado ? 'Sim' : 'Não'
     ]
@@ -265,7 +266,7 @@ const cancelarAgendamento = (id) => {
 const formatarDataHora = (textDataHora) => {
     let dataHora = new Date(textDataHora)
     const dia = dataHora.getDate()
-    const mes = dataHora.getMonth()
+    const mes = dataHora.getMonth() + 1
     const ano = dataHora.getFullYear()
     const hora = dataHora.getHours()
     return `${dia}/${mes}/${ano} ${hora}H`
