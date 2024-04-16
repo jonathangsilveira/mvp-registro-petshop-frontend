@@ -30,14 +30,15 @@ const buscarAgendamentosPorData = async () => {
  */
 const adicionarAgendamentos = (agendamentos) => {
     let tabela = document.getElementById('lista-resultados')
-    for (i = 0; i < tabela.rows.length; i++) {
-        tabela.deleteRow(i)
-    }
+    tabela.innerHTML = ''
+
+    adicionarCabecalhoTabela(tabela)
 
     agendamentos.forEach(item => adicionarAgendamento(tabela, item));
 }
 
 /**
+ * Adiciona linha na tabela de resultados com as informações do agendamento.
  * 
  * @param {HTMLTableElement} tabela 
  * @param {JSON} agendamento 
@@ -48,6 +49,7 @@ const adicionarAgendamento = (tabela, agendamento) => {
         formatarDataHora(agendamento.data_agendamento), 
         agendamento.servico_titulo,
         agendamento.nome_pet,
+        agendamento.nome_cliente,
         `R$ ${agendamento.valor_servico}`,
         agendamento.cancelado ? 'Sim' : 'Não'
     ]
@@ -265,10 +267,35 @@ const cancelarAgendamento = (id) => {
 const formatarDataHora = (textDataHora) => {
     let dataHora = new Date(textDataHora)
     const dia = dataHora.getDate()
-    const mes = dataHora.getMonth()
+    const mes = dataHora.getMonth() + 1
     const ano = dataHora.getFullYear()
     const hora = dataHora.getHours()
     return `${dia}/${mes}/${ano} ${hora}H`
+}
+
+/**
+ * Adiciona cabeçalho para a tabela de resultados.
+ * 
+ * @param {HTMLTableElement} tabela 
+ */
+const adicionarCabecalhoTabela = (tabela) => {
+    let titulos = [
+        'Data/Hora',
+        'Serviço',
+        'Pet',
+        'Cliente',
+        'Valor',
+        'Cancelado',
+        'Ações'
+    ]
+    
+    let cabecalho = tabela.createTHead()
+    let linha = cabecalho.insertRow()
+    titulos.forEach((titulo) => {
+        let celula = document.createElement('th')
+        celula.innerHTML = titulo;
+        linha.appendChild(celula)
+    })
 }
 
 // Inicia os filtros  na inicialização do script.

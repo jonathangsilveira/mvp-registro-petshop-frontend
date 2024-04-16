@@ -53,12 +53,13 @@ header {
 .botao-icone {
     background-color: #007bff;
     color: white;
-    padding: 4px;
+    padding: 8px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     align-content: center;
     align-self: center;
+    margin-right: 4px;
 }
 
 .botao-cancelar {
@@ -93,7 +94,7 @@ header {
     width: 100%;
 }
   
-.tabela-agendamentos td, #tabela-agendamentos th {
+.tabela-agendamentos td, .tabela-agendamentos th {
     border: 1px solid #ddd;
     padding: 8px;
 }
