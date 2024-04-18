@@ -29,11 +29,11 @@ A utilização do Bootstrap foi pontual, para exibição de ícones nos botões,
 
 Home page:
 
-![github-imagem-1](https://github.com/jonathangsilveira/mvp-registro-petshop-frontend/assets/19233288/8e8fa715-961e-4dbc-851c-e3fdeaaccf6c)
+![image](https://github.com/jonathangsilveira/mvp-registro-petshop-frontend/assets/19233288/8796c12f-ee56-42f3-8763-69454e86c793)
 
 Modal de agendamento de serviços:
 
-![github-imagem-2](https://github.com/jonathangsilveira/mvp-registro-petshop-frontend/assets/19233288/c0857448-e452-4559-8b21-3246f96eb53a)
+![image](https://github.com/jonathangsilveira/mvp-registro-petshop-frontend/assets/19233288/9b42b626-b9ad-4d32-9f88-0fa5bd0e4f5a)
 
 ---
 ## Como executar
